@@ -1,4 +1,12 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  reactStrictMode: false,
 
-module.exports = nextConfig
+  webpack: (config) => {
+    config.externals = [...config.externals, "hnswlib-node"];
+
+    return config;
+  },
+};
+
+module.exports = nextConfig;

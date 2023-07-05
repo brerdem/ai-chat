@@ -1,11 +1,28 @@
 "use client";
 
 import { NextPage } from "next";
+import { useCompletion } from "ai/react";
+import {} from "langchain/document_loaders/fs/pdf";
 
 type Props = {};
 
 const HomePage: NextPage<Props> = ({}) => {
-  return <div className="">Hello</div>;
+  const { completion, input, handleInputChange, handleSubmit } =
+    useCompletion();
+
+  return (
+    <div className="mx-auto w-full max-w-md py-24 flex flex-col stretch mt-10">
+      <form onSubmit={handleSubmit}>
+        <input
+          className="fixed w-full max-w-md bottom-0 border border-gray-300 rounded mb-8 shadow-xl p-2 text-black"
+          value={input}
+          placeholder="Describe your business..."
+          onChange={handleInputChange}
+        />
+      </form>
+      <div className="whitespace-pre-wrap my-6">{completion}</div>
+    </div>
+  );
 };
 
 export default HomePage;

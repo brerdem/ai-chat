@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
-  const { test } = await request.json();
+export let text: string | null = null;
 
-  return NextResponse.json({ response: test });
+export async function POST(request: NextRequest) {
+  const { txt } = await request.json();
+  text = txt;
+
+  return NextResponse.json({ response: "ok" });
 }
