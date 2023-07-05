@@ -74,14 +74,13 @@ export async function POST(req: Request) {
     vectorStore.asRetriever(),
     {
       verbose: true,
-      returnSourceDocuments: true,
+      returnSourceDocuments: false,
       questionGeneratorChainOptions: {
         llm: questionModel,
       },
       memory: new BufferMemory({
         memoryKey: "chat_history",
-        humanPrefix:
-          "You are a good assistant that answers question based on the document info you have. If you don't have any information just say I don't know. Answer question with the same language of the question",
+        humanPrefix: "Human",
         inputKey: "question", // The key for the input to the chain
         outputKey: "text",
         returnMessages: true, // If using with a chat model

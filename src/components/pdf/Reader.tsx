@@ -1,5 +1,6 @@
 "use client";
 
+import { useTextStore } from "@/lib/store";
 import WebViewer from "@pdftron/webviewer";
 import { FC, useEffect, useRef } from "react";
 
@@ -24,6 +25,7 @@ const config = {
 
 const Reader: FC<Props> = ({ blob }) => {
   const viewer = useRef<HTMLDivElement>(null);
+  const { addText } = useTextStore();
 
   async function coonstructDatabase(text: string) {
     const res = await fetch("/api/db-hnswlib", {
@@ -37,6 +39,7 @@ const Reader: FC<Props> = ({ blob }) => {
     });
     if (res) {
       console.log("res.json() ->", JSON.stringify(res.json(), null, 2));
+      addText(text);
     }
   }
 
