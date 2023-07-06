@@ -1,10 +1,15 @@
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import { pinecone } from "@/lib/pinecone-client";
 import { LangChainStream, Message, StreamingTextResponse } from "ai";
-import { ConversationalRetrievalQAChain } from "langchain/chains";
+import {
+  ConversationalRetrievalQAChain,
+  VectorDBQAChain,
+} from "langchain/chains";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { BufferMemory, ChatMessageHistory } from "langchain/memory";
+import { ChainTool } from "langchain/tools";
+import { Calculator } from "langchain/tools/calculator";
 import {
   AIChatMessage,
   HumanChatMessage,
@@ -14,6 +19,7 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { PineconeStore } from "langchain/vectorstores/pinecone";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { initializeAgentExecutorWithOptions } from "langchain/agents";
 
 //export const runtime = "edge";
 
@@ -69,6 +75,8 @@ export async function POST(req: Request) {
   /* Create the vectorstore */
   const vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
 
+  //const chain = VectorDBQAChain.fromLLM(llm, vectorStore);
+
   const chain = ConversationalRetrievalQAChain.fromLLM(
     llm,
     vectorStore.asRetriever(),
@@ -88,7 +96,25 @@ export async function POST(req: Request) {
     }
   );
 
+  // const qaTool = new ChainTool({
+  //   name: "pdf-chat",
+  //   description: "Conversational tool about a PDF document",
+  //   chain: chain,
+  //   returnDirect: true,
+  // });
+
+  // const executor = await initializeAgentExecutorWithOptions(
+  //   [qaTool],
+  //   new ChatOpenAI({ temperature: 0 }),
+  //   {
+  //     agentType: "openai-functions",
+  //     verbose: true,
+  //     callbacks: [handlers],
+  //   }
+  // );
+
   const lastMessage: Message = (messages as Message[]).at(-1)!;
+  //executor.call({ input: lastMessage.content });
   chain
     .call({ question: lastMessage.content }, [handlers])
     .catch(console.error);

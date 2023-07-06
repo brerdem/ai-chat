@@ -1,9 +1,10 @@
 "use client";
 
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { useChat } from "ai/react";
 import { useTextStore } from "@/lib/store";
+import MessageBalloon from "./MessageBalloon";
 
 type Props = {};
 
@@ -20,6 +21,12 @@ const Chat: FC<Props> = ({}) => {
   const [active, setActive] = useState(false);
   const { text } = useTextStore();
 
+  const divRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    divRef.current?.scrollIntoView({ behavior: "smooth" });
+  });
+
   console.log("messages ->", JSON.stringify(messages, null, 2));
 
   const startChat = async () => {
@@ -27,9 +34,9 @@ const Chat: FC<Props> = ({}) => {
     if (messages.length === 0 && !isLoading) {
       console.log("hey ->", JSON.stringify("hey", null, 2));
       await append({
-        role: "user",
+        role: "system",
         content:
-          "Nazik bir karşılama cümlesi ile birlikte bu doküman ile ilgili 5 adet soru örneği göster",
+          "Sen yardımsever bir asistansın. Konuşmanın en başında nazik bir karşılama cümlesi ile birlikte bu doküman ile ilgili 5 adet soru örneği göster",
         id: "onboarding",
         createdAt: new Date(),
       });
@@ -44,28 +51,16 @@ const Chat: FC<Props> = ({}) => {
   return (
     <div className="w-full flex flex-col relative">
       {active ? (
-        <div className="w-full shrink-0 h-[calc(100vh-8rem)] flex flex-col gap-4 overflow-auto overflow-x-hidden">
-          {messages
-            .filter((m) => m.id !== "onboarding")
-            .map((m) => (
-              <div
-                key={m.id}
-                className={`flex flex-row ${
-                  m.role === "user" ? "justify-end" : "justify-start"
-                } `}
-              >
-                <div
-                  className={`rounded-xl text-black flex items-center justify-center max-w-3xl py-2 px-4 whitespace-pre-wrap ${
-                    m.role === "user"
-                      ? "text-right bg-red-100 rounded-br-none"
-                      : "text-left bg-indigo-100 rounded-bl-none"
-                  } `}
-                >
-                  {m.content}
-                </div>
-              </div>
-            ))}
-        </div>
+        <>
+          <div className="w-full shrink-0 h-[calc(100vh-8rem)] flex flex-col gap-6 overflow-auto overflow-x-hidden">
+            {messages
+              .filter((m) => m.id !== "onboarding")
+              .map((m) => (
+                <MessageBalloon m={m} key={m.id} />
+              ))}
+            <div ref={divRef}></div>
+          </div>
+        </>
       ) : (
         <div className="w-full h-[calc(100vh-8rem)] flex items-center justify-center overflow-x-hidden">
           <Button onClick={() => startChat()} size={"lg"}>

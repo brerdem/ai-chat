@@ -51,9 +51,9 @@ const PDFMain: NextPage<Props> = ({}) => {
         >
           <input {...getInputProps()} />
           {isDragActive ? (
-            <p>Drop the files here ...</p>
+            <p>Buraya dosyaları sürükleyiniz...</p>
           ) : (
-            <p>Drag 'n' drop some files here, or click to select files</p>
+            <p>Basınız ya da buraya dosyaları sürükleyiniz.</p>
           )}
         </div>
         {fileBlob !== null && <Button onClick={() => remove()}>CLEAR</Button>}
