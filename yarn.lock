@@ -1888,10 +1888,10 @@ jsonpointer@^5.0.1:
     object.assign "^4.1.4"
     object.values "^1.1.6"
 
-langchain@^0.0.102:
-  version "0.0.102"
-  resolved "https://registry.yarnpkg.com/langchain/-/langchain-0.0.102.tgz#74e3974f6cd2c66fb2dd464cd4e985480c9d8cda"
-  integrity sha512-fAZP9YI3qOruPKYa9QrRwGIg2xr9qCAIonYLh0WUb58lkEDQnY8XbSapgWy4a6er5OCfEh9z6x4EPri1+HpD0g==
+langchain@^0.0.104:
+  version "0.0.104"
+  resolved "https://registry.yarnpkg.com/langchain/-/langchain-0.0.104.tgz#ac3eb8b1ee87d8c6d158261a112fdc0244ea237b"
+  integrity sha512-VmRMvUQt7599XU68fpMNY3eT3fY+MPgzxSf8tRP31WMs5GRv8A61mDRYWCY1KPBONxDvJqySGVMEIOb16aQebg==
   dependencies:
     "@anthropic-ai/sdk" "^0.4.3"
     ansi-styles "^5.0.0"
@@ -1903,7 +1903,7 @@ langchain@^0.0.102:
     js-tiktoken "^1.0.7"
     js-yaml "^4.1.0"
     jsonpointer "^5.0.1"
-    langchainplus-sdk "^0.0.15"
+    langchainplus-sdk "^0.0.19"
     ml-distance "^4.0.0"
     object-hash "^3.0.0"
     openai "^3.3.0"
@@ -1915,10 +1915,10 @@ langchain@^0.0.102:
     zod "^3.21.4"
     zod-to-json-schema "^3.20.4"
 
-langchainplus-sdk@^0.0.15:
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/langchainplus-sdk/-/langchainplus-sdk-0.0.15.tgz#216237d76ab4896ce74542b8e82ee579da3fdbe0"
-  integrity sha512-CWaTylvR2d17rErPqgLCBiAnY3UJMdV4c27itvL0CB0eurYnZspa75u3Xl4frmbMy0nhN2N94jWCnrAZX4YDjg==
+langchainplus-sdk@^0.0.19:
+  version "0.0.19"
+  resolved "https://registry.yarnpkg.com/langchainplus-sdk/-/langchainplus-sdk-0.0.19.tgz#356774670fbbe75dd17932c46492544959660aa2"
+  integrity sha512-WKMN90E8M/JWO9lajbw8sv32xVHUZM+fN9I4LUveffBoX4qoJFi6uzYeDH0loW2SjnOSh3Tnzlz+Qp6ZenCu6g==
   dependencies:
     "@types/uuid" "^9.0.1"
     commander "^10.0.1"

@@ -30,12 +30,10 @@ export async function POST(req: Request) {
   const { stream, handlers } = LangChainStream();
 
   const llm = new ChatOpenAI({
-    //modelName: "gpt-3.5-turbo-0301",
     streaming: true,
     openAIApiKey: process.env.OPENAI_API_KEY,
     temperature: 0,
-
-    //verbose: true,
+    modelName: "gpt-3.5-turbo-0613",
   });
 
   const questionModel = new ChatOpenAI({
@@ -83,9 +81,9 @@ export async function POST(req: Request) {
     {
       verbose: true,
       returnSourceDocuments: false,
-      questionGeneratorChainOptions: {
-        llm: questionModel,
-      },
+      // questionGeneratorChainOptions: {
+      //   llm: questionModel,
+      // },
       memory: new BufferMemory({
         memoryKey: "chat_history",
         humanPrefix: "Human",
@@ -96,28 +94,29 @@ export async function POST(req: Request) {
     }
   );
 
-  // const qaTool = new ChainTool({
-  //   name: "pdf-chat",
-  //   description: "Conversational tool about a PDF document",
-  //   chain: chain,
-  //   returnDirect: true,
-  // });
+  const pdfTool = new ChainTool({
+    name: "pdf-chat",
+    description: "Answer questions about the PDF docuement given",
+    chain: chain,
+    returnDirect: true,
+  });
 
-  // const executor = await initializeAgentExecutorWithOptions(
-  //   [qaTool],
-  //   new ChatOpenAI({ temperature: 0 }),
-  //   {
-  //     agentType: "openai-functions",
-  //     verbose: true,
-  //     callbacks: [handlers],
-  //   }
-  // );
+  const executor = await initializeAgentExecutorWithOptions(
+    [pdfTool, new Calculator()],
+    llm,
+    {
+      agentType: "openai-functions",
+      returnIntermediateSteps: false,
+      verbose: true,
+    }
+  );
 
   const lastMessage: Message = (messages as Message[]).at(-1)!;
-  //executor.call({ input: lastMessage.content });
-  chain
-    .call({ question: lastMessage.content }, [handlers])
-    .catch(console.error);
+  executor.call({ input: lastMessage.content }, [handlers]);
+
+  // chain
+  //   .call({ question: lastMessage.content }, [handlers])
+  //   .catch(console.error);
 
   return new StreamingTextResponse(stream);
 }

@@ -50,7 +50,7 @@ const WebParser: FC<Props> = ({ blob }) => {
           <iframe src={url} className="w-full h-full" ref={iframeRef}></iframe>
         </div>
       </div>
-      <div className="w-full h-full">
+      <div className="w-full h-full p-6">
         <ChatWeb url={url} />
       </div>
     </div>
