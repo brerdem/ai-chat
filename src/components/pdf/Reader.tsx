@@ -21,6 +21,8 @@ const config = {
   ],
   fullAPI: true,
   enableAnnotations: false,
+  licenseKey:
+    "BVS Buchverlag und Service AG (bvsb.vantage.ch):OEM:eBookBox::B+:AMS(20240429):E4A54CDD04B7480A0360B13AC9A2037860611FA5F7481E67CD621DDA5C7C5E0726B6B6F5C7",
 };
 
 const Reader: FC<Props> = ({ blob }) => {

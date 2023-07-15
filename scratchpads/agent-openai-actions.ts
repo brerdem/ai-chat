@@ -41,7 +41,7 @@ export async function POST(req: Request) {
     streaming: true,
     openAIApiKey: process.env.OPENAI_API_KEY,
     temperature: 0,
-    //modelName: "gpt-3.5-turbo-0613",
+    modelName: "gpt-3.5-turbo-0613",
   });
 
   const questionModel = new ChatOpenAI({
@@ -91,11 +91,12 @@ export async function POST(req: Request) {
     {
       verbose: true,
       returnSourceDocuments: false,
-      questionGeneratorChainOptions: {
-        llm: questionModel,
-      },
+      // questionGeneratorChainOptions: {
+      //   llm: questionModel,
+      // },
       memory: new BufferMemory({
         memoryKey: "chat_history",
+        humanPrefix: "Human",
         inputKey: "question", // The key for the input to the chain
         outputKey: "text",
         returnMessages: true, // If using with a chat model
@@ -103,12 +104,12 @@ export async function POST(req: Request) {
     }
   );
 
-  // const pdfTool = new ChainTool({
-  //   name: "pdf-chat",
-  //   description: "Answer questions about the PDF docuement given",
-  //   chain: chain,
-  //   returnDirect: true,
-  // });
+  const pdfTool = new ChainTool({
+    name: "pdf-chat",
+    description: "Answer questions about the PDF docuement given",
+    chain: chain,
+    returnDirect: true,
+  });
 
   // const dynamicTool = new DynamicTool({
   //   name: "calculation",
@@ -119,7 +120,7 @@ export async function POST(req: Request) {
 
   //const webBrowser = new WebBrowser({ model: llm, embeddings });
 
-  //const tools = [pdfTool, new Calculator()];
+  const tools = [pdfTool, new Calculator()];
 
   // const promptTemplate = ZeroShotAgent.createPrompt(tools, {
   //   prefix:
@@ -147,19 +148,19 @@ export async function POST(req: Request) {
   //   tools,
   // });
 
-  // const executor = await initializeAgentExecutorWithOptions(tools, llm, {
-  //   //agentType: "chat-conversational-react-description",
-  //   agentType: "openai-functions",
-  //   returnIntermediateSteps: true,
-  //   verbose: true,
-  // });
+  const executor = await initializeAgentExecutorWithOptions(tools, llm, {
+    //agentType: "chat-conversational-react-description",
+    agentType: "openai-functions",
+    returnIntermediateSteps: true,
+    verbose: true,
+  });
 
   const lastMessage: Message = (messages as Message[]).at(-1)!;
-  //executor.call({ input: lastMessage.content }, [handlers]);
+  executor.call({ input: lastMessage.content }, [handlers]);
 
-  chain
-    .call({ question: lastMessage.content }, [handlers])
-    .catch(console.error);
+  // chain
+  //   .call({ question: lastMessage.content }, [handlers])
+  //   .catch(console.error);
 
   return new StreamingTextResponse(stream);
 }

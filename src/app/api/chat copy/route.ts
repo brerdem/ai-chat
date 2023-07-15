@@ -1,5 +1,4 @@
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
-import { pinecone } from "@/lib/pinecone-client";
 import { LangChainStream, Message, StreamingTextResponse } from "ai";
 import {
   ConversationalRetrievalQAChain,

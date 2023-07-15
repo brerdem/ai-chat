@@ -9,42 +9,7 @@ import { ChatRequest, FunctionCallHandler } from "ai";
 
 type Props = {};
 
-const functionCallHandler: FunctionCallHandler = async (
-  chatMessages,
-  functionCall
-) => {
-  console.warn(functionCall);
-
-  if (functionCall.name === "calculator") {
-    if (functionCall.arguments) {
-      const parsedFunctionCallArguments = JSON.parse(functionCall.arguments);
-      // You now have access to the parsed arguments here (assuming the JSON was valid)
-      // If JSON is invalid, return an appropriate message to the model so that it may retry?
-      alert("ok");
-    }
-
-    // Generate a fake temperature
-
-    const functionResponse: ChatRequest = {
-      messages: [
-        ...chatMessages,
-        // {
-        //   id: nanoid(),
-        //   name: 'get_current_weather',
-        //   role: 'function' as const,
-        //   content: JSON.stringify({
-        //     temperature,
-        //     weather,
-        //     info: 'This data is randomly generated and came from a fake weather API!'
-        //   })
-        // }
-      ],
-    };
-    return functionResponse;
-  }
-};
-
-const Chat: FC<Props> = ({}) => {
+const ChatAPI: FC<Props> = ({}) => {
   const {
     messages,
     input,
@@ -54,7 +19,7 @@ const Chat: FC<Props> = ({}) => {
     append,
     isLoading,
   } = useChat({
-    experimental_onFunctionCall: functionCallHandler,
+    api: "/api/api-chain",
   });
   const [active, setActive] = useState(false);
   const { text } = useTextStore();
@@ -69,16 +34,6 @@ const Chat: FC<Props> = ({}) => {
 
   const startChat = async () => {
     setActive(true);
-    if (messages.length === 0 && !isLoading) {
-      console.log("hey ->", JSON.stringify("hey", null, 2));
-      await append({
-        role: "system",
-        content:
-          "Sen yardımsever bir asistansın. Konuşmanın en başında nazik bir karşılama cümlesi ile birlikte bu doküman ile ilgili 5 adet soru örneği göster",
-        id: "onboarding",
-        createdAt: new Date(),
-      });
-    }
   };
 
   useEffect(() => {
@@ -126,4 +81,4 @@ const Chat: FC<Props> = ({}) => {
   );
 };
 
-export default Chat;
+export default ChatAPI;
